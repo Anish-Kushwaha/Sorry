@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Are you still angry? ✨</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+</head>
+<body id="mainBody">
+    <canvas id="trailCanvas"></canvas>
+    <div class="bg-orb orb-1"></div>
+    <div class="bg-orb orb-2"></div>
+    <div id="sparkles-container"></div>
+    <div id="bubble-container"></div>
+
+    <div class="corner-tag">For the Angry Queen 👑</div>
+
+    <div class="main-container">
+        <div id="screen1" class="card">
+            <div class="emoji" id="mainEmoji">😤</div>
+            <h2>Are you still angry?</h2>
+            <p>If you are, try to catch the "Yes, very angry!" button! 🏃‍♂️</p>
+            <div class="btn-container">
+                <button id="noBtn" class="primary-btn">No, I'm not 😇</button>
+            </div>
+        </div>
+        
+        <button id="yesBtn" class="run-btn">Yes, very angry! 😡</button>
+
+        <!-- Feature 4: Interactive Mood Slider Card -->
+        <div id="mood-screen" class="card hidden">
+            <div class="emoji" id="moodEmoji">😤</div>
+            <h2>Adjust Your Mood Slider!</h2>
+            <p>Drag the slider to 100% to prove you are happy now! 😊</p>
+            <div style="margin: 25px 0;">
+                <input type="range" id="moodSlider" min="0" max="100" value="0">
+            </div>
+            <p id="moodLabel" style="font-weight: 600; color: #ff416c;">Current Mood: Very Angry! 🤬</p>
+        </div>
+
+        <div id="loader-screen" class="card hidden">
+            <div class="emoji" id="loaderEmoji">🔍</div>
+            <h2 id="loader-text">Analyzing Mood...</h2>
+            <div class="loader-bar-container">
+                <div class="loader-bar-fill" id="loaderFill"></div>
+            </div>
+            <p class="small-text" id="loaderSubText">Checking for genuine smile... 99%</p>
+        </div>
+
+        <div id="screen2" class="card hidden">
+            <div class="happiness-tag">Solly madam ji</div>
+            <div class="emoji">😝</div>
+            <h2 id="welcome-name">Now listen this song🎧!</h2>
+            <div class="audio-wrapper">
+                <audio id="myAudio" controls controlsList="nodownload">
+                    <source src="voice.mp3" type="audio/mpeg">
+                </audio>
+                <!-- Visualizer Canvas -->
+                <canvas id="visualizerCanvas" style="width: 100%; height: 50px; margin-top: 12px; display: block; border-radius: 10px;"></canvas>
+            </div>
+
+            <div class="ultimate-troll-container">
+                <div class="troll-box-main glowing-border" id="trollBox" onclick="startUltimateTroll()">
+                    <span id="trollMsg">⚠️DO NOT CLICK HERE🚫</span>
+                </div>
+            </div>
+                <p class="small-text">Bhot nakhre ho gaye, ab reply karo Chup-chaap! ☝️</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scrolling Floating Footer -->
+    <div class="scrolling-footer">Coded with ❤️ by @itzz_rahulopp</div>
+
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    position: relative;
+    transition: background 3s ease;
+}
+
+body.magic-theme { background: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%); }
+
+#trailCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 9999; }
+
+.corner-tag {
+    position: fixed; top: 20px; right: 20px;
+    background: rgba(255,255,255,0.3); padding: 5px 15px; border-radius: 50px;
+    font-size: 0.7rem; color: #fff; backdrop-filter: blur(5px);
+    border: 1px solid rgba(255,255,255,0.4); z-index: 100;
+}
+
+.bg-orb {
+    position: fixed; width: 250px; height: 250px; border-radius: 50%;
+    filter: blur(80px); z-index: 0; opacity: 0; transition: 1.5s ease;
+}
+.orb-1 { background: #ff416c; top: -50px; left: -50px; animation: floatOrb 15s infinite alternate; }
+.orb-2 { background: #7950f2; bottom: -50px; right: -50px; animation: floatOrb 20s infinite alternate-reverse; }
+@keyframes floatOrb { from { transform: translate(0, 0); } to { transform: translate(150px, 150px); } }
+
+body.show-magic .bg-orb { opacity: 0.5; }
+
+.card {
+    position: relative; /* Added so that z-index: 10 starts working */
+    background: rgba(255, 255, 255, 0.92); backdrop-filter: blur(10px);
+    padding: 30px 20px; border-radius: 30px; text-align: center;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.15); width: 90%; max-width: 360px;
+    z-index: 10; border: 1px solid rgba(255,255,255,0.5);
+}
+
+.hidden { display: none; }
+.emoji { font-size: 3.5rem; margin-bottom: 10px; animation: bounce 2s infinite; transition: 0.3s; }
+
+.loader-bar-container { width: 100%; height: 10px; background: #eee; border-radius: 10px; margin: 20px 0; overflow: hidden; }
+.loader-bar-fill { height: 100%; width: 0%; background: linear-gradient(to right, #ff416c, #a18cd1); animation: fillBar 2.5s ease-in-out forwards; }
+.loader-bar-fill.success-green { background: linear-gradient(to right, #00b894, #55efc4) !important; }
+.text-success-green { color: #00b894 !important; font-weight: 800; }
+
+.happiness-tag { background: #e3fcf7; color: #00b894; padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: 700; display: inline-block; margin-bottom: 10px; }
+.troll-box-main { 
+    width: 100%; 
+    min-height: 110px; 
+    height: auto; /* Fits perfectly with long dynamic texts */
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+    background: #fff; 
+    border-radius: 20px; 
+    padding: 15px; 
+    cursor: pointer; 
+    border: 3px solid #ff416c; 
+}
+#trollMsg {
+    white-space: normal; /* Enables normal wrapping behavior */
+    word-break: break-word; /* Forces wrapping on long sentences */
+    overflow-wrap: break-word;
+    text-align: center;
+    width: 100%;
+}
+.glowing-border { animation: multiColorGlow 1.5s infinite alternate; }
+
+@keyframes multiColorGlow {
+    0% { border-color: #ff416c; box-shadow: 0 0 15px #ff416c; }
+    100% { border-color: #7950f2; box-shadow: 0 0 15px #7950f2; }
+}
+
+button { padding: 14px 20px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+.primary-btn { background: linear-gradient(to right, #ff416c, #ff4b2b); color: white; width: 100%; }
+.run-btn { background: white; color: #ff416c; position: fixed; border: 2px solid #ff416c; padding: 10px 20px; z-index: 100; box-shadow: 0 5px 15px rgba(0,0,0,0.1); top: 60%; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+
+.zoom-in-entrance { animation: zoomInEffect 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+@keyframes zoomInEffect { from { opacity: 0; transform: scale(0.5); } to { opacity: 1; transform: scale(1); } }
+
+.audio-wrapper { margin: 15px 0; background: rgba(161, 140, 209, 0.1); padding: 10px; border-radius: 50px; }
+audio { width: 100%; height: 35px; }
+.small-text { font-size: 0.75rem; color: #888; margin-top: 8px; }
+
+@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+.sparkle { position: absolute; bottom: -50px; animation: floatUp 4s linear forwards; pointer-events: none; }
+@keyframes floatUp { 0% { transform: translateY(0); opacity: 0; } 100% { transform: translateY(-115vh); opacity: 0; } }
+
+@media (max-width: 600px) { body { cursor: auto; } #trailCanvas { display: none; } }
+
+/* --- Feature 4: Beautiful Mood Slider styling --- */
+#moodSlider {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 10px;
+    background: #e4e4e4;
+    outline: none;
+    transition: background 0.3s ease;
+}
+
+#moodSlider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(255, 65, 108, 0.4);
+    transition: transform 0.1s ease;
+}
+
+#moodSlider::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+/* --- Scrolling Footer Style & Upward Loop Animation --- */
+.scrolling-footer {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    color: #ff3838; /* Aesthetic Vibrant Red */
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    pointer-events: none;
+    z-index: 5; /* Card ke peeche se travel karega */
+    animation: floatFooterUp 12s linear infinite;
+}
+
+@keyframes floatFooterUp {
+    0% {
+        bottom: -10%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.8;
+    }
+    90% {
+        opacity: 0.8;
+    }
+    100% {
+        bottom: 110%;
+        opacity: 0;
+    }
+}
