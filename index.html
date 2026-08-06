@@ -1,92 +1,546 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Are you still angry? ✨</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Piuuu Sorry Universe 💖</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    :root {
+      --pink: #ff3f9d;
+      --hot-pink: #ff0f86;
+      --baby-pink: #ffe4f3;
+      --purple: #9b5cff;
+      --deep: #64143e;
+      --white-glass: rgba(255, 255, 255, 0.82);
+    }
+
+    html,
+    body {
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+      font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+      color: var(--deep);
+      background:
+        radial-gradient(circle at 12% 12%, rgba(255, 255, 255, 0.95), transparent 22%),
+        radial-gradient(circle at 90% 4%, rgba(255, 185, 225, 0.8), transparent 24%),
+        radial-gradient(circle at 50% 100%, rgba(193, 151, 255, 0.85), transparent 38%),
+        linear-gradient(135deg, #ffd8eb 0%, #ffacd6 42%, #d7bdff 100%);
+    }
+
+    body {
+      position: relative;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    body::before {
+      content: "💗  🎀  ✨  🌸  💌  🧸  💞  👑";
+      position: fixed;
+      inset: -20% -10%;
+      z-index: 0;
+      color: rgba(255, 255, 255, 0.28);
+      font-size: clamp(2.4rem, 9vw, 7rem);
+      letter-spacing: 1.1rem;
+      line-height: 1.8;
+      transform: rotate(-14deg);
+      pointer-events: none;
+    }
+
+    .glow {
+      position: fixed;
+      z-index: 0;
+      width: 18rem;
+      height: 18rem;
+      border-radius: 50%;
+      filter: blur(50px);
+      opacity: 0.68;
+      animation: dreamyFloat 8s ease-in-out infinite alternate;
+      pointer-events: none;
+    }
+
+    .glow.one {
+      top: -5rem;
+      left: -4rem;
+      background: #ff54b3;
+    }
+
+    .glow.two {
+      right: -4rem;
+      bottom: -5rem;
+      background: #a375ff;
+      animation-delay: -4s;
+    }
+
+    .floating-layer {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .float-heart {
+      position: absolute;
+      bottom: -40px;
+      opacity: 0.78;
+      animation: heartRise linear forwards;
+      filter: drop-shadow(0 8px 10px rgba(137, 28, 84, 0.18));
+    }
+
+    .app {
+      position: relative;
+      z-index: 2;
+      width: min(96vw, 520px);
+      min-height: min(760px, 94vh);
+      display: grid;
+      place-items: center;
+    }
+
+    .top-badge {
+      position: fixed;
+      top: 12px;
+      left: 50%;
+      z-index: 5;
+      transform: translateX(-50%);
+      padding: 9px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.76);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.46);
+      box-shadow: 0 12px 30px rgba(172, 35, 110, 0.18);
+      backdrop-filter: blur(12px);
+      font-weight: 800;
+      font-size: 0.88rem;
+      color: #b81271;
+      white-space: nowrap;
+    }
+
+    .page-card {
+      display: none;
+      width: 100%;
+      padding: clamp(18px, 5vw, 32px);
+      border: 2px solid rgba(255, 255, 255, 0.8);
+      border-radius: 34px;
+      background: var(--white-glass);
+      box-shadow: 0 28px 80px rgba(113, 24, 76, 0.24);
+      text-align: center;
+      backdrop-filter: blur(17px);
+    }
+
+    .page-card.active {
+      display: block;
+      animation: cardIn 0.58s cubic-bezier(.2, 1.35, .35, 1) both;
+    }
+
+    .page-count {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 12px;
+      padding: 6px 13px;
+      border-radius: 999px;
+      background: #ffe2f1;
+      color: #d1167b;
+      font-weight: 900;
+      font-size: 0.82rem;
+    }
+
+    .sticker {
+      display: block;
+      width: min(50vw, 178px);
+      height: 160px;
+      object-fit: contain;
+      margin: 0 auto 8px;
+      border-radius: 24px;
+      filter: drop-shadow(0 16px 24px rgba(139, 32, 91, 0.2));
+    }
+
+    h1,
+    h2 {
+      font-family: "Trebuchet MS", "Segoe UI", cursive;
+      color: #c31677;
+      line-height: 0.95;
+      letter-spacing: -0.03em;
+    }
+
+    h1 {
+      font-size: clamp(2.15rem, 8.8vw, 3.35rem);
+    }
+
+    h2 {
+      font-size: clamp(2.3rem, 9vw, 3.6rem);
+    }
+
+    .message {
+      margin: 16px auto;
+      font-size: clamp(1rem, 3.8vw, 1.18rem);
+      line-height: 1.62;
+      max-width: 38ch;
+    }
+
+    .meter {
+      height: 12px;
+      margin: 18px 0 8px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: #ffe0f0;
+      box-shadow: inset 0 3px 9px rgba(94, 14, 55, 0.12);
+    }
+
+    .meter-fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+      background: linear-gradient(90deg, #ff2593, #ff9ed4, #8f5cff);
+      box-shadow: 0 0 18px rgba(255, 47, 150, 0.45);
+    }
+
+    .button-row {
+      display: flex;
+      gap: 12px;
+      justify-content: center;
+      align-items: center;
+      margin-top: 22px;
+    }
+
+    button {
+      border: 0;
+      border-radius: 999px;
+      padding: 15px 19px;
+      font-family: inherit;
+      font-size: 1rem;
+      font-weight: 900;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .yes-btn {
+      flex: 1;
+      color: #fff;
+      background: linear-gradient(135deg, #ff2294, #9a5cff);
+      box-shadow: 0 14px 26px rgba(209, 23, 126, 0.32);
+    }
+
+    .yes-btn:hover,
+    .yes-btn:focus-visible {
+      transform: translateY(-3px) scale(1.02);
+      outline: none;
+    }
+
+    .no-btn {
+      position: fixed;
+      z-index: 20;
+      left: calc(50% + 72px);
+      top: calc(50% + 230px);
+      color: #bf1674;
+      background: #fff;
+      border: 2px solid #ff79bf;
+      box-shadow: 0 14px 28px rgba(157, 34, 103, 0.22);
+      touch-action: none;
+    }
+
+    .no-btn.running {
+      animation: wiggle 0.28s ease;
+    }
+
+    .final-page {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      display: none;
+      place-items: center;
+      padding: 18px;
+      background:
+        radial-gradient(circle at 50% 12%, rgba(255, 255, 255, 0.96), transparent 24%),
+        radial-gradient(circle at 15% 85%, rgba(255, 88, 177, 0.28), transparent 28%),
+        linear-gradient(135deg, #fff1f8 0%, #ffc6e5 48%, #c7b4ff 100%);
+    }
+
+    .final-page.show {
+      display: grid;
+    }
+
+    .final-card {
+      width: min(96vw, 580px);
+      padding: clamp(20px, 5vw, 36px);
+      border: 2px solid rgba(255, 255, 255, 0.86);
+      border-radius: 36px;
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: 0 30px 90px rgba(105, 28, 78, 0.28);
+      text-align: center;
+      backdrop-filter: blur(18px);
+      animation: cardIn 0.65s cubic-bezier(.2, 1.35, .35, 1) both;
+    }
+
+    .final-sticker {
+      width: min(58vw, 230px);
+      margin-bottom: 12px;
+      border-radius: 28px;
+      filter: drop-shadow(0 18px 24px rgba(139, 32, 91, 0.22));
+    }
+
+    .promise {
+      margin: 18px 0;
+      padding: 16px;
+      border: 2px dashed #ff6fbd;
+      border-radius: 22px;
+      background: #fff4fa;
+      font-weight: 800;
+      line-height: 1.55;
+    }
+
+    audio {
+      width: 100%;
+      margin-top: 8px;
+      accent-color: var(--pink);
+    }
+
+    .hint {
+      margin-top: 9px;
+      color: #8b4a70;
+      font-size: 0.84rem;
+    }
+
+    @keyframes cardIn {
+      from {
+        opacity: 0;
+        transform: translateY(24px) scale(0.9) rotate(-1deg);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1) rotate(0deg);
+      }
+    }
+
+    @keyframes dreamyFloat {
+      to {
+        transform: translate(42px, 34px) scale(1.12);
+      }
+    }
+
+    @keyframes heartRise {
+      0% {
+        transform: translateY(0) rotate(0deg) scale(0.75);
+        opacity: 0;
+      }
+      12% {
+        opacity: 0.86;
+      }
+      100% {
+        transform: translateY(-112vh) rotate(34deg) scale(1.2);
+        opacity: 0;
+      }
+    }
+
+    @keyframes wiggle {
+      0%, 100% { transform: rotate(0deg) scale(1); }
+      35% { transform: rotate(9deg) scale(1.05); }
+      70% { transform: rotate(-9deg) scale(1.05); }
+    }
+
+    @media (max-width: 540px) {
+      body {
+        padding: 12px;
+      }
+
+      .app {
+        min-height: 92vh;
+      }
+
+      .button-row {
+        flex-direction: column;
+      }
+
+      .yes-btn {
+        width: 100%;
+      }
+
+      .no-btn {
+        left: 18px;
+        top: auto;
+        bottom: 18px;
+      }
+    }
+  </style>
 </head>
-<body id="mainBody">
-    <canvas id="trailCanvas"></canvas>
-    <div class="bg-orb orb-1"></div>
-    <div class="bg-orb orb-2"></div>
-    <div id="sparkles-container"></div>
-    <div id="bubble-container"></div>
+<body>
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+  <div class="floating-layer" id="floatingLayer"></div>
+  <div class="top-badge">Only for Piuuu, meri cute queen 💕</div>
 
-    <div class="corner-tag">For the Angry Queen 👑</div>
+  <main class="app" id="app">
+    <section class="page-card active" data-page="1">
+      <span class="page-count">💌 Page 1 / 7</span>
+      <img class="sticker" src="https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif" alt="Cute sorry sticker" />
+      <h1>Piuuu meri bestie queen...</h1>
+      <p class="message">Mujhse galti ho gayi, aur main excuses nahi banaunga. Bas dil se bol raha hoon: sorry Piuuu, please thoda sa maaf kar do na. 🥺</p>
+      <div class="meter"><span class="meter-fill" style="width: 14.28%"></span></div>
+      <div class="button-row"><button class="yes-btn" type="button">Next sorry ✨</button></div>
+    </section>
 
-    <div class="main-container">
-        <div id="screen1" class="card">
-            <div class="emoji" id="mainEmoji">😤</div>
-            <h2>Are you still angry?</h2>
-            <p>If you are, try to catch the "Yes, very angry!" button! 🏃‍♂️</p>
-            <div class="btn-container">
-                <button id="noBtn" class="primary-btn">No, I'm not 😇</button>
-            </div>
-        </div>
-        
-        <button id="yesBtn" class="run-btn">Yes, very angry! 😡</button>
+    <section class="page-card" data-page="2">
+      <span class="page-count">🎀 Page 2 / 7</span>
+      <img class="sticker" src="https://media.giphy.com/media/9d3LQ6TdV2Flo8ODTU/giphy.gif" alt="Emotional hug sticker" />
+      <h1>Official cute apology notice</h1>
+      <p class="message">Dear Piuuu, tumhari narazgi bilkul valid hai. Main apni stupidity ko pink glitter mein pack karke dustbin mein daal raha hoon. Sorry yaar! 💗</p>
+      <div class="meter"><span class="meter-fill" style="width: 28.56%"></span></div>
+      <div class="button-row"><button class="yes-btn" type="button">Thoda aur sorry suno 💫</button></div>
+    </section>
 
-        <!-- Feature 4: Interactive Mood Slider Card -->
-        <div id="mood-screen" class="card hidden">
-            <div class="emoji" id="moodEmoji">😤</div>
-            <h2>Adjust Your Mood Slider!</h2>
-            <p>Drag the slider to 100% to prove you are happy now! 😊</p>
-            <div style="margin: 25px 0;">
-                <input type="range" id="moodSlider" min="0" max="100" value="0">
-            </div>
-            <p id="moodLabel" style="font-weight: 600; color: #ff416c;">Current Mood: Very Angry! 🤬</p>
-        </div>
+    <section class="page-card" data-page="3">
+      <span class="page-count">🌧️ Page 3 / 7</span>
+      <img class="sticker" src="https://media.giphy.com/media/l4FGpP4lxGGgK5CBW/giphy.gif" alt="Filmy emotional sticker" />
+      <h1>Drama level: filmy sorry</h1>
+      <p class="message">Agar ye Bollywood hota na, toh main baarish mein khada hoke bolta: “Piuuu, tumhari smile ke bina background music bhi sad lagta hai.” Maaf kar do please. 🎬</p>
+      <div class="meter"><span class="meter-fill" style="width: 42.84%"></span></div>
+      <div class="button-row"><button class="yes-btn" type="button">Next emotional attack 🥹</button></div>
+    </section>
 
-        <div id="loader-screen" class="card hidden">
-            <div class="emoji" id="loaderEmoji">🔍</div>
-            <h2 id="loader-text">Analyzing Mood...</h2>
-            <div class="loader-bar-container">
-                <div class="loader-bar-fill" id="loaderFill"></div>
-            </div>
-            <p class="small-text" id="loaderSubText">Checking for genuine smile... 99%</p>
-        </div>
+    <section class="page-card" data-page="4">
+      <span class="page-count">🧸 Page 4 / 7</span>
+      <img class="sticker" src="https://media.giphy.com/media/3oEduOnl5IHM5NRodO/giphy.gif" alt="Teddy apology sticker" />
+      <h1>Tiny teddy court appeal</h1>
+      <p class="message">Judge Piuuu ji, accused accept karta hai ki usne hurt kiya. Punishment: 100 sorry, 50 compliments, aur lifelong better behavior. Verdict please: maafi? 🫶</p>
+      <div class="meter"><span class="meter-fill" style="width: 57.12%"></span></div>
+      <div class="button-row"><button class="yes-btn" type="button">Case continue karo 👑</button></div>
+    </section>
 
-        <div id="screen2" class="card hidden">
-            <div class="happiness-tag">Solly madam ji</div>
-            <div class="emoji">😝</div>
-            <h2 id="welcome-name">Now listen this song🎧!</h2>
-            <div class="audio-wrapper">
-                <audio id="myAudio" controls controlsList="nodownload">
-                    <source src="voice.mp3" type="audio/mpeg">
-                </audio>
-                <!-- Visualizer Canvas -->
-                <canvas id="visualizerCanvas" style="width: 100%; height: 50px; margin-top: 12px; display: block; border-radius: 10px;"></canvas>
-            </div>
+    <section class="page-card" data-page="5">
+      <span class="page-count">✨ Page 5 / 7</span>
+      <img class="sticker" src="https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif" alt="Magical sparkle sticker" />
+      <h1>Sorry but make it magical</h1>
+      <p class="message">Kaash mere paas magic wand hoti, main tumhara mood instantly happy kar deta. Tab tak meri taraf se sparkly sorry, extra care, aur no-repeat promise. 🌸</p>
+      <div class="meter"><span class="meter-fill" style="width: 71.4%"></span></div>
+      <div class="button-row"><button class="yes-btn" type="button">Magic next page 💖</button></div>
+    </section>
 
-            <div class="ultimate-troll-container">
-                <div class="troll-box-main glowing-border" id="trollBox" onclick="startUltimateTroll()">
-                    <span id="trollMsg">⚠️DO NOT CLICK HERE🚫</span>
-                </div>
-            </div>
-                <p class="small-text">Bhot nakhre ho gaye, ab reply karo Chup-chaap! ☝️</p>
-            </div>
-        </div>
+    <section class="page-card" data-page="6">
+      <span class="page-count">🚀 Page 6 / 7</span>
+      <img class="sticker" src="https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif" alt="Cute cat emotional sticker" />
+      <h1>Piuuu smile rescue mission</h1>
+      <p class="message">Mission target simple hai: Piuuu ki smile wapas lana. Fuel: meri guilt. Rocket: ye cute website. Landing message: I am really, really sorry. 💞</p>
+      <div class="meter"><span class="meter-fill" style="width: 85.68%"></span></div>
+      <div class="button-row"><button class="yes-btn" type="button">Final sorry unlock 🔐</button></div>
+    </section>
+
+    <section class="page-card" data-page="7">
+      <span class="page-count">👑 Page 7 / 7</span>
+      <img class="sticker" src="https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif" alt="Happy emotional sticker" />
+      <h1>Final boss apology unlocked</h1>
+      <p class="message">Piuuu, mazaak alag, tum mere liye important ho. Agar maine tumhe hurt kiya, I am genuinely sorry. Please “Yes” dabao aur mujhe ek chance de do. 🥺</p>
+      <div class="meter"><span class="meter-fill" style="width: 100%"></span></div>
+      <div class="button-row"><button class="yes-btn" type="button">Yes, maaf kiya 💖</button></div>
+    </section>
+  </main>
+
+  <button class="no-btn" id="noBtn" type="button">No 😤</button>
+
+  <section class="final-page" id="finalPage">
+    <div class="final-card">
+      <img class="final-sticker" src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" alt="Happy hug sticker" />
+      <h2>Yayyy Piuuu smiled! 💖</h2>
+      <p class="message">Ab meri taraf se ek bada sa virtual hug, ek chhota sa promise, aur dil se wala sorry: main tumhari smile ko priority banaunga. Pakka! 🫶</p>
+      <div class="promise">“Sorry Piuuu, galti meri thi. Tum special ho, aur tumhari khushi mere liye important hai.”</div>
+      <audio id="sorrySong" autoplay loop controls>
+        <source src="voice.mp3" type="audio/mpeg" />
+      </audio>
+      <p class="hint">Song automatically start karne ki koshish hogi. Agar browser block kare, ek tap karke play kar dena. 🎧</p>
     </div>
+  </section>
 
-    <!-- Scrolling Floating Footer -->
-    <footer style="text-align:center;padding:20px;font-size:14px;color:#888;border-top:1px solid #222;margin-top:40px;">
-  <p>&copy; 2026 Anish Kushwaha. All Rights Reserved.</p>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script>
+    const cards = Array.from(document.querySelectorAll(".page-card"));
+    const nextButtons = Array.from(document.querySelectorAll(".yes-btn"));
+    const noBtn = document.getElementById("noBtn");
+    const app = document.getElementById("app");
+    const finalPage = document.getElementById("finalPage");
+    const sorrySong = document.getElementById("sorrySong");
+    const floatingLayer = document.getElementById("floatingLayer");
+    let currentPage = 0;
 
-  <p>
-    🌐 <a href="https://Anish-Kushwaha.online" target="_blank" rel="noopener noreferrer">Portfolio</a> |
-    🏢 <a href="https://AnishEnterprises.site" target="_blank" rel="noopener noreferrer">ANISH ENTERPRISES</a>
-  </p>
+    function showPage(index) {
+      cards.forEach((card, cardIndex) => {
+        card.classList.toggle("active", cardIndex === index);
+      });
+      currentPage = index;
+      sparkleBurst(36);
+    }
 
-  <p>
-    <a href="https://github.com/Anish-Kushwaha" target="_blank">GitHub</a> •
-    <a href="https://www.linkedin.com/in/anish-kushwaha-43a915383" target="_blank">LinkedIn</a> •
-    <a href="https://x.com/Anish_Kushwaha_" target="_blank">X</a>
-  </p>
-    </footer>
+    function sparkleBurst(count) {
+      if (typeof confetti !== "function") return;
+      confetti({
+        particleCount: count,
+        spread: 75,
+        origin: { y: 0.72 },
+        colors: ["#ff2f95", "#ffc1e3", "#9b5cff", "#ffffff"]
+      });
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <script src="script.js"></script>
+    function openHappyPage() {
+      app.style.display = "none";
+      noBtn.style.display = "none";
+      finalPage.classList.add("show");
+      sparkleBurst(240);
+      sorrySong.play().catch(() => {
+        document.body.addEventListener("click", () => sorrySong.play(), { once: true });
+        document.body.addEventListener("touchstart", () => sorrySong.play(), { once: true });
+      });
+    }
+
+    nextButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        if (currentPage < cards.length - 1) {
+          showPage(currentPage + 1);
+          return;
+        }
+        openHappyPage();
+      });
+    });
+
+    function moveNoButton(event) {
+      event.preventDefault();
+      const padding = 14;
+      const maxX = Math.max(padding, window.innerWidth - noBtn.offsetWidth - padding);
+      const maxY = Math.max(padding, window.innerHeight - noBtn.offsetHeight - padding);
+      noBtn.style.left = `${Math.floor(Math.random() * maxX)}px`;
+      noBtn.style.top = `${Math.floor(Math.random() * maxY)}px`;
+      noBtn.style.right = "auto";
+      noBtn.style.bottom = "auto";
+      noBtn.textContent = ["Nope 😝", "Catch me first 💅", "Maafi pending 🥺", "Yes dabao na 💖", "No not allowed 🙈"][Math.floor(Math.random() * 5)];
+      noBtn.classList.remove("running");
+      noBtn.offsetHeight;
+      noBtn.classList.add("running");
+    }
+
+    noBtn.addEventListener("click", moveNoButton);
+    noBtn.addEventListener("mouseover", moveNoButton);
+    noBtn.addEventListener("touchstart", moveNoButton, { passive: false });
+
+    function createFloatingHeart() {
+      const heart = document.createElement("span");
+      heart.className = "float-heart";
+      heart.textContent = ["💗", "💖", "🎀", "✨", "🌸", "🫶", "💞"][Math.floor(Math.random() * 7)];
+      heart.style.left = `${Math.random() * 100}vw`;
+      heart.style.fontSize = `${Math.random() * 1.4 + 1}rem`;
+      heart.style.animationDuration = `${Math.random() * 2.4 + 4.2}s`;
+      floatingLayer.appendChild(heart);
+      setTimeout(() => heart.remove(), 7200);
+    }
+
+    showPage(0);
+    setInterval(createFloatingHeart, 480);
+  </script>
 </body>
 </html>
