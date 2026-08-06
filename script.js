@@ -1,281 +1,131 @@
-const noBtn = document.getElementById('noBtn');
-const yesBtn = document.getElementById('yesBtn'); 
-const screen1 = document.getElementById('screen1');
-const screen2 = document.getElementById('screen2');
-const loaderScreen = document.getElementById('loader-screen');
-const loaderText = document.getElementById('loader-text');
-const loaderFill = document.getElementById('loaderFill');
-const mainEmoji = document.getElementById('mainEmoji');
-const audio = document.getElementById('myAudio');
-const trollMsg = document.getElementById('trollMsg');
-const trollBox = document.getElementById('trollBox');
-const canvas = document.getElementById('trailCanvas');
-const ctx = canvas.getContext('2d');
-
-// --- Sound System ---
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-function playSound(type) {
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain); gain.connect(audioCtx.destination);
-    if (type === 'whoosh') {
-        osc.frequency.setValueAtTime(100, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(600, audioCtx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.1);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-    } else if (type === 'pop') {
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(400, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(10, audioCtx.currentTime + 0.1);
-        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.1);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.1);
-    } else if (type === 'success') {
-        osc.frequency.setValueAtTime(500, audioCtx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(800, audioCtx.currentTime + 0.2);
-        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-        gain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.3);
-        osc.start(); osc.stop(audioCtx.currentTime + 0.3);
-    }
-}
-
-// --- Cursor Trail ---
-let particles = [];
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-class Particle {
-    constructor(x, y) {
-        this.x = x; this.y = y;
-        this.size = Math.random() * 5 + 2;
-        this.speedX = Math.random() * 2 - 1;
-        this.speedY = Math.random() * 2 - 1;
-        this.color = `hsl(${Math.random() * 60 + 280}, 100%, 70%)`;
-        this.alpha = 1;
-    }
-    update() {
-        this.x += this.speedX; this.y += this.speedY;
-        if (this.size > 0.1) this.size -= 0.1;
-        this.alpha -= 0.02;
-    }
-    draw() {
-        ctx.save(); ctx.globalAlpha = this.alpha;
-        ctx.fillStyle = this.color; ctx.beginPath();
-        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-        ctx.fill(); ctx.restore();
-    }
-}
-
-window.addEventListener('mousemove', (e) => {
-    for (let i = 0; i < 2; i++) particles.push(new Particle(e.x, e.y));
-});
-
-function animateParticles() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    for (let i = 0; i < particles.length; i++) {
-        particles[i].update(); particles[i].draw();
-        if (particles[i].alpha <= 0) { particles.splice(i, 1); i--; }
-    }
-    requestAnimationFrame(animateParticles);
-}
-animateParticles();
-
-// --- Main UI Logic ---
-const trollPhrases = ["Pakad ke dikhao! 🏃‍♀️", "Itna slow? 🐢", "Try again ji! 😜", "Nahi milega! 🚫"];
-
-function moveButton() {
-    playSound('whoosh');
-    const maxX = window.innerWidth - yesBtn.offsetWidth - 20;
-    const maxY = window.innerHeight - yesBtn.offsetHeight - 20;
-    const newX = Math.max(10, Math.floor(Math.random() * maxX));
-    const newY = Math.max(10, Math.floor(Math.random() * maxY));
-    yesBtn.style.left = newX + "px";
-    yesBtn.style.top = newY + "px";
-    yesBtn.style.transform = "none";
-    yesBtn.innerText = trollPhrases[Math.floor(Math.random() * trollPhrases.length)];
-}
-
-yesBtn.addEventListener('mouseover', moveButton);
-yesBtn.addEventListener('touchstart', (e) => { e.preventDefault(); moveButton(); });
-
-// --- Feature 4: Mood Slider Logic ---
-const moodScreen = document.getElementById('mood-screen');
-const moodSlider = document.getElementById('moodSlider');
-const moodEmoji = document.getElementById('moodEmoji');
-const moodLabel = document.getElementById('moodLabel');
-
-noBtn.addEventListener('click', () => {
-    playSound('pop');
-    yesBtn.style.display = 'none';
-    confetti({ particleCount: 100, spread: 60 });
-    screen1.style.display = 'none';
-    moodScreen.classList.remove('hidden'); // Opens the mood slider screen
-});
-
-moodSlider.addEventListener('input', (e) => {
-    const val = parseInt(e.target.value);
-    if (val <= 25) {
-        moodEmoji.innerText = "😤";
-        moodLabel.innerText = "Current Mood: Very Angry! 🤬";
-        moodLabel.style.color = "#ff416c";
-    } else if (val <= 50) {
-        moodEmoji.innerText = "😕";
-        moodLabel.innerText = "Current Mood: Still Annoyed... 🫤";
-        moodLabel.style.color = "#fd79a8";
-    } else if (val <= 75) {
-        moodEmoji.innerText = "🙂";
-        moodLabel.innerText = "Current Mood: Okay, slightly better. 😐";
-        moodLabel.style.color = "#7950f2";
-    } else if (val < 95) {
-        moodEmoji.innerText = "😊";
-        moodLabel.innerText = "Current Mood: Smiling? Almost there! 😊";
-        moodLabel.style.color = "#2ed573";
-    } else if (val >= 95) {
-        moodEmoji.innerText = "🥰";
-        moodLabel.innerText = "Current Mood: Genuine Smile Detected! ❤️";
-        moodLabel.style.color = "#00b894";
-        
-        moodSlider.disabled = true; // Avoids multiple triggers
-
-        setTimeout(() => {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            moodScreen.style.display = 'none';
-            loaderScreen.classList.remove('hidden');
-
-            setTimeout(() => {
-                loaderFill.classList.add('success-green');
-                loaderText.innerText = "{name}'s Genuine Smile Detected! 😊";
-                loaderText.classList.add('text-success-green');
-                playSound('success');
-                confetti({ particleCount: 40, spread: 50 });
-            }, 1800);
-
-            setTimeout(() => {
-                loaderScreen.style.display = 'none';
-                screen2.classList.remove('hidden');
-                screen2.classList.add('zoom-in-entrance');
-                document.body.classList.add('show-magic');
-                document.body.classList.add('magic-theme'); 
-                setInterval(createSparkle, 500);
-                audio.play().catch(e => {});
-            }, 3500);
-        }, 800);
-    }
-});
-
-// --- Feature 2: Audio Visualizer Logic ---
-let visInitialized = false;
-function initVisualizer() {
-    if (visInitialized) return;
-    visInitialized = true;
-
-    if (audioCtx.state === 'suspended') audioCtx.resume();
-
-    const src = audioCtx.createMediaElementSource(audio);
-    const analyser = audioCtx.createAnalyser();
-    src.connect(analyser);
-    analyser.connect(audioCtx.destination);
-
-    analyser.fftSize = 64;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
-
-    const canvasElement = document.getElementById('visualizerCanvas');
-    const canvasCtx = canvasElement.getContext('2d');
-
-    canvasElement.width = canvasElement.clientWidth;
-    canvasElement.height = canvasElement.clientHeight;
-
-    function draw() {
-        requestAnimationFrame(draw);
-        analyser.getByteFrequencyData(dataArray);
-
-        canvasCtx.clearRect(0, 0, canvasElement.width, canvasElement.height);
-
-        const barWidth = (canvasElement.width / bufferLength) * 1.6;
-        let barHeight;
-        let x = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-            barHeight = (dataArray[i] / 255) * canvasElement.height;
-
-            const r = (i * 10) % 255;
-            const g = 140;
-            const b = 230;
-
-            canvasCtx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            canvasCtx.fillRect(x, canvasElement.height - barHeight, barWidth - 2, barHeight);
-
-            x += barWidth;
-        }
-    }
-    draw();
-}
-
-audio.addEventListener('play', initVisualizer);
-
-function createSparkle() {
-    const sparkle = document.createElement('div');
-    sparkle.className = 'sparkle'; sparkle.innerHTML = '✨';
-    sparkle.style.left = Math.random() * 100 + 'vw';
-    document.getElementById('sparkles-container').appendChild(sparkle);
-    setTimeout(() => sparkle.remove(), 4000);
-}
-
-const ultimateSecrets = [
-    { t: "Mana kiya tha na {name}! ab text padhte raho....😂", c: "#ff416c" },
-    { t: "You are so stubborn😜", c: "#7950f2" },
-    { t: "Smile toh aa gayi hogi ab tak.📸", c: "#f08c00" },
-    { t: "You'll never find someone who cheers you up like this... 😝", c: "#7b3f00" },
-    { t: "Honestly, annoying you is my favorite thing to do! 🐒", c: "#a18cd1" },
-    { t: "Chalo now stop being angry", c: "#7b3f00" },
-    { t: "Oye, you look so cute when you are angry! ✨", c: "#e84393" },
-    { t: "Zyada nakhre mat dikhaya kro meko sharm aati hai🫣😝", c: "#0984e3" },
-    { t: "Chalo ab bahut trolling ho gayi, dil se sorry! 🙂️", c: "#ff4757" },
-    { t: "Are you smiling now? Yes or No? Reply fast! 🏃‍♀️", c: "#2ed573" },
-    { t: "No. 1 nakhre wali Ladki! 👑", c: "#f9ca24" },
-    { t: "100 times sorry to {name}! ✨", c: "#6d597a" }
+const pages = [
+  {
+    title: "Piuuu meri bestie queen...",
+    sticker: "https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif",
+    message: "Mujhse galti ho gayi, aur haan main excuses nahi banaunga. Bas dil se bol raha hoon: sorry Piuuu, please thoda sa maaf kar do na. 🥺"
+  },
+  {
+    title: "Official cute apology notice 💌",
+    sticker: "https://media.giphy.com/media/9d3LQ6TdV2Flo8ODTU/giphy.gif",
+    message: "Dear Piuuu, tumhari narazgi bilkul valid hai. Main apni stupidity ko pink glitter mein pack karke dustbin mein daal raha hoon. Sorry yaar! 🎀"
+  },
+  {
+    title: "Drama level: filmy sorry 🌧️",
+    sticker: "https://media.giphy.com/media/l4FGpP4lxGGgK5CBW/giphy.gif",
+    message: "Agar ye Bollywood hota na, toh main baarish mein khada hoke bolta: ‘Piuuu, tumhari smile ke bina background music bhi sad lagta hai.’ Maaf kar do please. 🎬"
+  },
+  {
+    title: "Tiny teddy court mein appeal 🧸",
+    sticker: "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExY21jYW1janV0YjZyc3k0aGR4ZTZ6Ynl6a3Q0NXVuMTZ6em44bGpibCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/3oEduOnl5IHM5NRodO/giphy.gif",
+    message: "Judge Piuuu ji, accused ne accept kar liya hai ki usne hurt kiya. Punishment: 100 sorry, 50 compliments, aur lifelong better behavior. Verdict please: maafi? 🥹"
+  },
+  {
+    title: "Sorry but make it magical ✨",
+    sticker: "https://media.giphy.com/media/26BRv0ThflsHCqDrG/giphy.gif",
+    message: "Main wish karta hoon ki ek magic wand se tumhara mood instantly happy ho jaye. Tab tak meri taraf se sparkly sorry, extra care, aur no-repeat promise. 🌸"
+  },
+  {
+    title: "Piuuu smile rescue mission 🚀",
+    sticker: "https://media.giphy.com/media/ICOgUNjpvO0PC/giphy.gif",
+    message: "Mission ka target simple hai: Piuuu ki smile wapas lana. Fuel: meri guilt. Rocket: ye cute website. Landing message: I am really, really sorry. 💗"
+  },
+  {
+    title: "Final boss apology unlocked 👑",
+    sticker: "https://media.giphy.com/media/11sBLVxNs7v6WA/giphy.gif",
+    message: "Piuuu, mazaak alag, tum mere liye important ho. Agar maine tumhe hurt kiya, I am genuinely sorry. Please ‘Yes’ dabao aur mujhe ek chance de do. 🫶"
+  }
 ];
 
-// --- Feature 5: Typewriter Effect Helper ---
-function typeWriter(text, element, speed = 40) {
-    element.textContent = ""; // Use textContent to preserve all spaces on mobile
-    let i = 0;
-    function type() {
-        if (i < text.length) {
-            element.textContent += text.charAt(i);
-            i++;
-            setTimeout(type, speed);
-        }
-    }
-    type();
+const card = document.getElementById("card");
+const stepText = document.getElementById("stepText");
+const sticker = document.getElementById("sticker");
+const title = document.getElementById("title");
+const message = document.getElementById("message");
+const meterFill = document.getElementById("meterFill");
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const happyPage = document.getElementById("happyPage");
+const sorrySong = document.getElementById("sorrySong");
+const hearts = document.getElementById("hearts");
+
+let pageIndex = 0;
+let typingTimer;
+
+function typeMessage(text) {
+  clearInterval(typingTimer);
+  message.textContent = "";
+  let charIndex = 0;
+  typingTimer = setInterval(() => {
+    message.textContent += text.charAt(charIndex);
+    charIndex += 1;
+    if (charIndex >= text.length) clearInterval(typingTimer);
+  }, 18);
 }
 
-let trollIdx = 0;
-let loopStarted = false;
-function startUltimateTroll() {
-    if (loopStarted) return;
-    loopStarted = true;
-    trollBox.classList.remove('glowing-border');
-    
-    // Pehla message bina delay ke start hoga
-    trollMsg.style.opacity = 1;
-    typeWriter(ultimateSecrets[trollIdx].t, trollMsg);
-    trollBox.style.borderColor = ultimateSecrets[trollIdx].c;
-    trollMsg.style.color = ultimateSecrets[trollIdx].c;
-    trollIdx = (trollIdx + 1) % ultimateSecrets.length;
-
-    setInterval(() => {
-        trollMsg.style.opacity = 0;
-        setTimeout(() => {
-            trollMsg.style.opacity = 1;
-            typeWriter(ultimateSecrets[trollIdx].t, trollMsg);
-            trollBox.style.borderColor = ultimateSecrets[trollIdx].c;
-            trollMsg.style.color = ultimateSecrets[trollIdx].c;
-            trollIdx = (trollIdx + 1) % ultimateSecrets.length;
-        }, 300);
-        confetti({ particleCount: 20, spread: 50, colors: [ultimateSecrets[trollIdx].c] });
-    }, 3800); // 3.8s isliye kiya taaki typing completely khatam ho jaye
+function renderPage() {
+  const page = pages[pageIndex];
+  stepText.textContent = `Page ${pageIndex + 1} / ${pages.length}`;
+  sticker.src = page.sticker;
+  title.textContent = page.title;
+  yesBtn.textContent = pageIndex === pages.length - 1 ? "Yes, maaf kiya 💖" : "Next sorry ✨";
+  meterFill.style.width = `${((pageIndex + 1) / pages.length) * 100}%`;
+  card.style.animation = "none";
+  card.offsetHeight;
+  card.style.animation = "pop 0.55s cubic-bezier(.2, 1.4, .4, 1) both";
+  typeMessage(page.message);
 }
+
+function moveNoButton(event) {
+  event.preventDefault();
+  const padding = 16;
+  const maxX = Math.max(padding, window.innerWidth - noBtn.offsetWidth - padding);
+  const maxY = Math.max(padding, window.innerHeight - noBtn.offsetHeight - padding);
+  const randomX = Math.floor(Math.random() * maxX);
+  const randomY = Math.floor(Math.random() * maxY);
+  noBtn.style.left = `${randomX}px`;
+  noBtn.style.top = `${randomY}px`;
+  noBtn.style.right = "auto";
+  noBtn.style.bottom = "auto";
+  noBtn.classList.remove("runaway");
+  noBtn.offsetHeight;
+  noBtn.classList.add("runaway");
+  noBtn.textContent = ["Nope, catch me 😝", "Not allowed 🙈", "Maafi pending 💅", "Try Yes na 🥺"][Math.floor(Math.random() * 4)];
+}
+
+function launchFinalPage() {
+  document.querySelector(".app-shell").classList.add("hidden");
+  happyPage.classList.remove("hidden");
+  noBtn.classList.add("hidden");
+  confetti({ particleCount: 220, spread: 110, origin: { y: 0.65 } });
+  sorrySong.play().catch(() => {
+    document.body.addEventListener("click", () => sorrySong.play(), { once: true });
+  });
+}
+
+function floatHeart() {
+  const heart = document.createElement("span");
+  heart.className = "heart";
+  heart.textContent = ["💗", "💖", "🌸", "✨", "🎀", "🫶"][Math.floor(Math.random() * 6)];
+  heart.style.left = `${Math.random() * 100}vw`;
+  heart.style.fontSize = `${Math.random() * 1.2 + 1.1}rem`;
+  heart.style.animationDuration = `${Math.random() * 2 + 4}s`;
+  hearts.appendChild(heart);
+  setTimeout(() => heart.remove(), 6500);
+}
+
+yesBtn.addEventListener("click", () => {
+  confetti({ particleCount: 80, spread: 75, origin: { y: 0.72 } });
+  if (pageIndex < pages.length - 1) {
+    pageIndex += 1;
+    renderPage();
+    return;
+  }
+  launchFinalPage();
+});
+
+noBtn.addEventListener("click", moveNoButton);
+noBtn.addEventListener("mouseover", moveNoButton);
+noBtn.addEventListener("touchstart", moveNoButton, { passive: false });
+
+renderPage();
+setInterval(floatHeart, 550);
