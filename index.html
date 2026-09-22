@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sorry Piu 🫂</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  body {
+    height: 100vh;
+    width: 100vw;
+    overflow: hidden;
+    font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    background: linear-gradient(135deg, #ffd1e8, #ffe0f0, #ffc2e2, #ffd6ec);
+    background-size: 400% 400%;
+    animation: bgShift 10s ease infinite;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+
+  @keyframes bgShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.75);
+    border-radius: 30px;
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.35);
+    max-width: 420px;
+    width: 90%;
+    backdrop-filter: blur(6px);
+    border: 3px solid #ffb6d9;
+    position: relative;
+    z-index: 5;
+  }
+
+  h1 {
+    color: #d6336c;
+    font-size: 1.8rem;
+    margin-bottom: 10px;
+    text-shadow: 1px 1px 0 #fff;
+  }
+
+  .msg {
+    color: #a6336c;
+    font-size: 1.1rem;
+    margin-bottom: 25px;
+    line-height: 1.5;
+  }
+
+  .hearts-decor {
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+  }
+
+  .buttons {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    position: relative;
+    height: 70px;
+  }
+
+  button {
+    padding: 12px 22px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: transform 0.2s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+  }
+
+  #okBtn {
+    background: linear-gradient(135deg, #ff8fc7, #ff5ca8);
+    color: white;
+  }
+
+  #okBtn:hover {
+    transform: scale(1.08);
+  }
+
+  #noBtn {
+    background: linear-gradient(135deg, #bbb, #888);
+    color: white;
+    position: relative;
+    left: 0;
+    top: 0;
+  }
+
+  .flower {
+    position: fixed;
+    top: -50px;
+    font-size: 1.8rem;
+    animation: fall linear forwards;
+    z-index: 3;
+    pointer-events: none;
+  }
+
+  @keyframes fall {
+    to {
+      transform: translateY(110vh) rotate(360deg);
+    }
+  }
+
+  .piu-text {
+    position: fixed;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    font-size: 3rem;
+    color: #ff3d8a;
+    text-shadow: 2px 2px 0 #fff, 0 0 20px #ff8fc7;
+    font-weight: bold;
+    z-index: 10;
+    animation: popIn 0.6s ease forwards;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  @keyframes popIn {
+    0% { transform: translate(-50%, -50%) scale(0) rotate(-10deg); opacity: 0; }
+    60% { transform: translate(-50%, -50%) scale(1.2) rotate(5deg); opacity: 1; }
+    100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .hidden {
+    display: none;
+  }
+</style>
+</head>
+<body>
+
+  <div class="card" id="mainCard">
+    <div class="hearts-decor">🌸💗🌸</div>
+    <h1>I'm Really Sorry, Piu 😭</h1>
+    <p class="msg">Piu maaf kar dena yr 😭😭... <br>I didn't mean to hurt you with my words. Please forgive me?</p>
+    <div class="buttons">
+      <button id="okBtn">Its OK 🫠</button>
+      <button id="noBtn">NO 😡</button>
+    </div>
+  </div>
+
+  <script>
+    const noBtn = document.getElementById('noBtn');
+    const okBtn = document.getElementById('okBtn');
+    const buttonsContainer = document.querySelector('.buttons');
+
+    // Make the NO button run away on click / hover
+    function moveNoButton() {
+      const containerRect = buttonsContainer.getBoundingClientRect();
+      const btnWidth = noBtn.offsetWidth;
+      const btnHeight = noBtn.offsetHeight;
+
+      // Move it somewhere random on the whole screen so it feels like it's "running away"
+      const maxX = window.innerWidth - btnWidth - 20;
+      const maxY = window.innerHeight - btnHeight - 20;
+
+      const randomX = Math.random() * maxX;
+      const randomY = Math.random() * maxY;
+
+      noBtn.style.position = 'fixed';
+      noBtn.style.left = randomX + 'px';
+      noBtn.style.top = randomY + 'px';
+      noBtn.style.zIndex = '20';
+    }
+
+    noBtn.addEventListener('click', moveNoButton);
+    noBtn.addEventListener('mouseover', moveNoButton); // extra cheeky on desktop
+    noBtn.addEventListener('touchstart', function(e) {
+      e.preventDefault();
+      moveNoButton();
+    });
+
+    // Flower fall + Piu text on "Its OK"
+    okBtn.addEventListener('click', function() {
+      spawnFlowers();
+      spawnPiuText();
+    });
+
+    function spawnFlowers() {
+      const flowers = ['🌸', '🌺', '🌷', '💐', '🌼', '💮'];
+      const count = 40;
+
+      for (let i = 0; i < count; i++) {
+        setTimeout(() => {
+          const flower = document.createElement('div');
+          flower.classList.add('flower');
+          flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+          flower.style.left = Math.random() * 100 + 'vw';
+          const duration = 3 + Math.random() * 3;
+          flower.style.animationDuration = duration + 's';
+          flower.style.fontSize = (1.2 + Math.random() * 1.5) + 'rem';
+          document.body.appendChild(flower);
+
+          setTimeout(() => flower.remove(), duration * 1000 + 200);
+        }, i * 80);
+      }
+    }
+
+    function spawnPiuText() {
+      const existing = document.querySelector('.piu-text');
+      if (existing) existing.remove();
+
+      const piuText = document.createElement('div');
+      piuText.classList.add('piu-text');
+      piuText.innerHTML = 'Piu 😭🫂';
+      document.body.appendChild(piuText);
+
+      setTimeout(() => {
+        piuText.style.transition = 'opacity 1s ease';
+        piuText.style.opacity = '0';
+        setTimeout(() => piuText.remove(), 1000);
+      }, 3500);
+    }
+  </script>
+
+</body>
+</html>
+
