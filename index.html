@@ -16,8 +16,7 @@
        6. Hero Section
        7. Letter Section
        8. Reasons Section
-       9. Memories Carousel
-      10. Mood Slider
+       9. Mood Slider
       11. Decision Section (buttons)
       12. Flowers / Confetti / Floating Elements
       13. Thank You Overlay
@@ -443,88 +442,7 @@
   }
 
   /* ==========================================================
-     9. MEMORIES CAROUSEL
-  ========================================================== */
-  .carousel-wrap {
-    max-width: 520px;
-    width: 100%;
-    position: relative;
-  }
-
-  .carousel-track {
-    display: flex;
-    overflow: hidden;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-soft);
-    border: 3px solid var(--pink-300);
-  }
-
-  .carousel-slide {
-    min-width: 100%;
-    background: var(--white-glass-strong);
-    padding: 40px 30px;
-    text-align: center;
-    transition: transform 0.5s ease;
-  }
-
-  .carousel-emoji {
-    font-size: 3rem;
-    margin-bottom: 16px;
-    display: block;
-  }
-
-  .carousel-caption {
-    font-size: 1.05rem;
-    color: var(--pink-800);
-    line-height: 1.6;
-  }
-
-  .carousel-controls {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px;
-    margin-top: 20px;
-  }
-
-  .carousel-arrow {
-    background: var(--pink-500);
-    color: white;
-    border: none;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    box-shadow: 0 6px 14px rgba(255, 92, 168, 0.4);
-    transition: transform var(--transition-fast);
-  }
-
-  .carousel-arrow:hover {
-    transform: scale(1.1);
-  }
-
-  .carousel-dots {
-    display: flex;
-    gap: 8px;
-  }
-
-  .carousel-dot {
-    width: 9px;
-    height: 9px;
-    border-radius: 50%;
-    background: var(--pink-200);
-    cursor: pointer;
-    transition: var(--transition-fast);
-  }
-
-  .carousel-dot.active {
-    background: var(--pink-600);
-    transform: scale(1.3);
-  }
-
-  /* ==========================================================
-     10. MOOD SLIDER
+     9. MOOD SLIDER
   ========================================================== */
   .mood-box {
     max-width: 480px;
@@ -870,7 +788,6 @@
     <div class="nav-dot" data-target="hero"></div>
     <div class="nav-dot" data-target="letter"></div>
     <div class="nav-dot" data-target="reasons"></div>
-    <div class="nav-dot" data-target="memories"></div>
     <div class="nav-dot" data-target="mood"></div>
     <div class="nav-dot" data-target="decision"></div>
   </div>
@@ -940,8 +857,6 @@
   </section>
 
   <!-- =====================================================================
-       MEMORIES CAROUSEL SECTION
-  <!-- =====================================================================
        MOOD SLIDER SECTION
   ===================================================================== -->
   <section id="mood">
@@ -998,10 +913,9 @@
          C. Nav dots + scroll spy
          D. Letter typewriter effect
          E. Reasons scroll-reveal (IntersectionObserver)
-         F. Memories carousel
-         G. Mood slider
-         H. Decision buttons (NO runs away, OK triggers flowers/confetti)
-         I. Thank-you overlay control
+         F. Mood slider
+         G. Decision buttons (NO runs away, OK triggers flowers/confetti)
+         H. Thank-you overlay control
   ===================================================================== -->
   <script>
   (function () {
@@ -1163,59 +1077,7 @@
     });
 
     /* ========================================================
-       F. MEMORIES CAROUSEL
-    ======================================================== */
-    const carouselTrack = document.getElementById('carouselTrack');
-    const slides = document.querySelectorAll('.carousel-slide');
-    const dotsContainer = document.getElementById('carouselDots');
-    const prevBtn = document.getElementById('prevSlide');
-    const nextBtn = document.getElementById('nextSlide');
-    let currentSlide = 0;
-
-    slides.forEach(function (_, index) {
-      const dot = document.createElement('div');
-      dot.classList.add('carousel-dot');
-      if (index === 0) dot.classList.add('active');
-      dot.addEventListener('click', function () {
-        goToSlide(index);
-      });
-      dotsContainer.appendChild(dot);
-    });
-
-    const carouselDots = document.querySelectorAll('.carousel-dot');
-
-    function goToSlide(index) {
-      currentSlide = (index + slides.length) % slides.length;
-      carouselTrack.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
-      carouselDots.forEach(function (dot, i) {
-        dot.classList.toggle('active', i === currentSlide);
-      });
-    }
-
-    prevBtn.addEventListener('click', function () {
-      goToSlide(currentSlide - 1);
-    });
-
-    nextBtn.addEventListener('click', function () {
-      goToSlide(currentSlide + 1);
-    });
-
-    let autoSlideInterval = setInterval(function () {
-      goToSlide(currentSlide + 1);
-    }, 4500);
-
-    carouselTrack.addEventListener('mouseenter', function () {
-      clearInterval(autoSlideInterval);
-    });
-
-    carouselTrack.addEventListener('mouseleave', function () {
-      autoSlideInterval = setInterval(function () {
-        goToSlide(currentSlide + 1);
-      }, 4500);
-    });
-
-    /* ========================================================
-       G. MOOD SLIDER
+       F. MOOD SLIDER
     ======================================================== */
     const moodRange = document.getElementById('moodRange');
     const moodEmoji = document.getElementById('moodEmoji');
@@ -1246,7 +1108,7 @@
     updateMood();
 
     /* ========================================================
-       H. DECISION BUTTONS
+       G. DECISION BUTTONS
     ======================================================== */
     const noBtn = document.getElementById('noBtn');
     const okBtn = document.getElementById('okBtn');
