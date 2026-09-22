@@ -2,89 +2,640 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sorry Piu 🫂</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Sorry Piu 🫂 | A Little Apology</title>
+
+<!-- =====================================================================
+     STYLE SHEET
+     Organized into sections:
+       1. Reset & Root Variables
+       2. Global Typography
+       3. Background & Ambient Layers
+       4. Loader Screen
+       5. Navigation Dots
+       6. Hero Section
+       7. Letter Section
+       8. Reasons Section
+       9. Memories Carousel
+      10. Mood Slider
+      11. Decision Section (buttons)
+      12. Flowers / Confetti / Floating Elements
+      13. Thank You Overlay
+      14. Footer
+      15. Utility Animations
+      16. Responsive Media Queries
+===================================================================== -->
 <style>
+
+  /* ==========================================================
+     1. RESET & ROOT VARIABLES
+  ========================================================== */
   * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :root {
+    --pink-50:  #fff5fa;
+    --pink-100: #ffe3f0;
+    --pink-200: #ffd1e8;
+    --pink-300: #ffb6d9;
+    --pink-400: #ff8fc7;
+    --pink-500: #ff5ca8;
+    --pink-600: #ff3d8a;
+    --pink-700: #d6336c;
+    --pink-800: #a6336c;
+    --purple-200: #e9d5ff;
+    --purple-400: #c084fc;
+    --white-glass: rgba(255, 255, 255, 0.75);
+    --white-glass-strong: rgba(255, 255, 255, 0.9);
+    --shadow-soft: 0 15px 35px rgba(255, 105, 180, 0.35);
+    --shadow-deep: 0 25px 60px rgba(214, 51, 108, 0.4);
+    --radius-lg: 30px;
+    --radius-md: 20px;
+    --radius-sm: 12px;
+    --font-main: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
+    --transition-fast: 0.2s ease;
+    --transition-med: 0.4s ease;
+    --transition-slow: 0.8s ease;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: env(safe-area-inset-top, 0px);
   }
 
   body {
-    height: 100vh;
-    width: 100vw;
-    overflow: hidden;
-    font-family: 'Comic Sans MS', 'Segoe UI', cursive, sans-serif;
-    background: linear-gradient(135deg, #ffd1e8, #ffe0f0, #ffc2e2, #ffd6ec);
+    font-family: var(--font-main);
+    background: linear-gradient(135deg, var(--pink-200), var(--pink-100), var(--pink-300), #ffd6ec);
     background-size: 400% 400%;
-    animation: bgShift 10s ease infinite;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    animation: bgShift 12s ease infinite;
+    color: var(--pink-800);
+    overflow-x: hidden;
     position: relative;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
   @keyframes bgShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
+    0%   { background-position: 0% 50%; }
+    50%  { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
   }
 
-  .card {
-    background: rgba(255, 255, 255, 0.75);
-    border-radius: 30px;
-    padding: 40px 30px;
-    text-align: center;
-    box-shadow: 0 15px 35px rgba(255, 105, 180, 0.35);
-    max-width: 420px;
-    width: 90%;
-    backdrop-filter: blur(6px);
-    border: 3px solid #ffb6d9;
+  section {
     position: relative;
-    z-index: 5;
+    min-height: 100vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 20px;
+    z-index: 2;
   }
 
-  h1 {
-    color: #d6336c;
-    font-size: 1.8rem;
-    margin-bottom: 10px;
+  h1, h2, h3 {
     text-shadow: 1px 1px 0 #fff;
   }
 
-  .msg {
-    color: #a6336c;
+  ::selection {
+    background: var(--pink-400);
+    color: white;
+  }
+
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--pink-100);
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--pink-400);
+    border-radius: 10px;
+  }
+
+  /* ==========================================================
+     4. LOADER SCREEN
+  ========================================================== */
+  #loader {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, var(--pink-300), var(--pink-500));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 999;
+    transition: opacity 0.8s ease, visibility 0.8s ease;
+  }
+
+  #loader.hide {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .loader-heart {
+    font-size: 4rem;
+    animation: heartbeat 1s ease-in-out infinite;
+  }
+
+  @keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.2); }
+    40% { transform: scale(0.95); }
+    60% { transform: scale(1.15); }
+  }
+
+  .loader-text {
+    margin-top: 20px;
+    color: white;
     font-size: 1.1rem;
-    margin-bottom: 25px;
+    letter-spacing: 1px;
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+  }
+
+  .loader-bar-track {
+    margin-top: 25px;
+    width: 200px;
+    height: 8px;
+    background: rgba(255,255,255,0.4);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+
+  .loader-bar-fill {
+    height: 100%;
+    width: 0%;
+    background: white;
+    border-radius: 10px;
+    animation: fillBar 1.6s ease forwards;
+  }
+
+  @keyframes fillBar {
+    to { width: 100%; }
+  }
+
+  /* ==========================================================
+     3. BACKGROUND & AMBIENT LAYERS
+  ========================================================== */
+  #ambient-layer {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+  }
+
+  .floating-heart {
+    position: absolute;
+    bottom: -60px;
+    font-size: 1.4rem;
+    opacity: 0.7;
+    animation: floatUp linear forwards;
+    user-select: none;
+  }
+
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0) translateX(0) rotate(0deg);
+      opacity: 0;
+    }
+    10% {
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-110vh) translateX(var(--drift, 40px)) rotate(360deg);
+      opacity: 0;
+    }
+  }
+
+  .sparkle {
+    position: absolute;
+    font-size: 0.9rem;
+    opacity: 0;
+    animation: sparklePop 2.5s ease-in-out infinite;
+  }
+
+  @keyframes sparklePop {
+    0%, 100% { opacity: 0; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+  }
+
+  /* ==========================================================
+     5. NAVIGATION DOTS
+  ========================================================== */
+  #nav-dots {
+    position: fixed;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 50;
+  }
+
+  .nav-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.6);
+    border: 2px solid var(--pink-500);
+    cursor: pointer;
+    transition: var(--transition-fast);
+  }
+
+  .nav-dot.active {
+    background: var(--pink-500);
+    transform: scale(1.3);
+  }
+
+  .nav-dot:hover {
+    transform: scale(1.2);
+  }
+
+  @media (max-width: 640px) {
+    #nav-dots {
+      display: none;
+    }
+  }
+
+  /* ==========================================================
+     6. HERO SECTION
+  ========================================================== */
+  #hero {
+    text-align: center;
+  }
+
+  .hero-badge {
+    font-size: 2.4rem;
+    margin-bottom: 10px;
+    animation: wiggle 3s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  @keyframes wiggle {
+    0%, 100% { transform: rotate(-4deg); }
+    50% { transform: rotate(4deg); }
+  }
+
+  .hero-title {
+    font-size: clamp(1.8rem, 6vw, 3.2rem);
+    color: var(--pink-700);
+    margin-bottom: 14px;
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 3vw, 1.3rem);
+    color: var(--pink-800);
+    max-width: 560px;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+
+  .hero-highlight {
+    background: linear-gradient(120deg, transparent 0%, var(--pink-200) 0%);
+    background-repeat: no-repeat;
+    background-size: 100% 40%;
+    background-position: 0 88%;
+    padding: 0 4px;
+  }
+
+  .scroll-hint {
+    margin-top: 40px;
+    font-size: 0.95rem;
+    color: var(--pink-600);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    animation: bounceHint 1.6s ease-in-out infinite;
+    cursor: pointer;
+  }
+
+  @keyframes bounceHint {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* ==========================================================
+     7. LETTER SECTION
+  ========================================================== */
+  .glass-card {
+    background: var(--white-glass);
+    border-radius: var(--radius-lg);
+    padding: 40px 34px;
+    box-shadow: var(--shadow-soft);
+    border: 3px solid var(--pink-300);
+    backdrop-filter: blur(6px);
+    max-width: 560px;
+    width: 100%;
+  }
+
+  .section-heading {
+    font-size: clamp(1.4rem, 4vw, 2rem);
+    color: var(--pink-700);
+    margin-bottom: 22px;
+    text-align: center;
+  }
+
+  .letter-paper {
+    background: var(--white-glass-strong);
+    border-radius: var(--radius-md);
+    padding: 30px 26px;
+    min-height: 220px;
+    box-shadow: inset 0 0 0 2px var(--pink-200);
+    position: relative;
+  }
+
+  .letter-paper::before {
+    content: "💌";
+    position: absolute;
+    top: -20px;
+    left: -14px;
+    font-size: 2rem;
+    transform: rotate(-15deg);
+  }
+
+  #letter-text {
+    font-size: 1.05rem;
+    line-height: 1.8;
+    color: var(--pink-800);
+    white-space: pre-wrap;
+  }
+
+  .typing-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1.1em;
+    background: var(--pink-600);
+    margin-left: 2px;
+    vertical-align: middle;
+    animation: blink 0.8s step-end infinite;
+  }
+
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+
+  .letter-signature {
+    text-align: right;
+    margin-top: 18px;
+    font-style: italic;
+    color: var(--pink-600);
+    opacity: 0;
+    transition: opacity 0.6s ease;
+  }
+
+  .letter-signature.show {
+    opacity: 1;
+  }
+
+  /* ==========================================================
+     8. REASONS SECTION
+  ========================================================== */
+  .reasons-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 800px;
+    width: 100%;
+  }
+
+  .reason-card {
+    background: var(--white-glass-strong);
+    border-radius: var(--radius-md);
+    padding: 24px 20px;
+    text-align: center;
+    box-shadow: 0 10px 25px rgba(255, 105, 180, 0.2);
+    border: 2px solid var(--pink-200);
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .reason-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reason-icon {
+    font-size: 2rem;
+    margin-bottom: 12px;
+    display: block;
+  }
+
+  .reason-title {
+    font-weight: bold;
+    color: var(--pink-700);
+    margin-bottom: 8px;
+    font-size: 1.05rem;
+  }
+
+  .reason-desc {
+    font-size: 0.9rem;
+    color: var(--pink-800);
     line-height: 1.5;
   }
 
-  .hearts-decor {
-    font-size: 1.5rem;
-    margin-bottom: 15px;
+  /* ==========================================================
+     9. MEMORIES CAROUSEL
+  ========================================================== */
+  .carousel-wrap {
+    max-width: 520px;
+    width: 100%;
+    position: relative;
   }
 
-  .buttons {
+  .carousel-track {
+    display: flex;
+    overflow: hidden;
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-soft);
+    border: 3px solid var(--pink-300);
+  }
+
+  .carousel-slide {
+    min-width: 100%;
+    background: var(--white-glass-strong);
+    padding: 40px 30px;
+    text-align: center;
+    transition: transform 0.5s ease;
+  }
+
+  .carousel-emoji {
+    font-size: 3rem;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .carousel-caption {
+    font-size: 1.05rem;
+    color: var(--pink-800);
+    line-height: 1.6;
+  }
+
+  .carousel-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .carousel-arrow {
+    background: var(--pink-500);
+    color: white;
+    border: none;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: 0 6px 14px rgba(255, 92, 168, 0.4);
+    transition: transform var(--transition-fast);
+  }
+
+  .carousel-arrow:hover {
+    transform: scale(1.1);
+  }
+
+  .carousel-dots {
+    display: flex;
+    gap: 8px;
+  }
+
+  .carousel-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--pink-200);
+    cursor: pointer;
+    transition: var(--transition-fast);
+  }
+
+  .carousel-dot.active {
+    background: var(--pink-600);
+    transform: scale(1.3);
+  }
+
+  /* ==========================================================
+     10. MOOD SLIDER
+  ========================================================== */
+  .mood-box {
+    max-width: 480px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .mood-emoji-display {
+    font-size: 3.5rem;
+    margin-bottom: 20px;
+    transition: transform 0.2s ease;
+  }
+
+  input[type="range"].mood-range {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 10px;
+    border-radius: 10px;
+    background: linear-gradient(90deg, #ff5c5c, #ffb84d, #ffe066, #a8e063, #63e6be);
+    outline: none;
+    margin: 20px 0;
+  }
+
+  input[type="range"].mood-range::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid var(--pink-500);
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  }
+
+  input[type="range"].mood-range::-moz-range-thumb {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: white;
+    border: 4px solid var(--pink-500);
+    cursor: pointer;
+  }
+
+  .mood-label {
+    font-size: 1rem;
+    color: var(--pink-700);
+    font-weight: bold;
+    min-height: 1.4em;
+  }
+
+  /* ==========================================================
+     11. DECISION SECTION
+  ========================================================== */
+  #decision {
+    text-align: center;
+  }
+
+  .decision-card {
+    background: var(--white-glass);
+    border-radius: var(--radius-lg);
+    padding: 44px 32px;
+    box-shadow: var(--shadow-deep);
+    border: 3px solid var(--pink-300);
+    max-width: 460px;
+    width: 100%;
+    position: relative;
+  }
+
+  .decision-hearts {
+    font-size: 1.6rem;
+    margin-bottom: 14px;
+  }
+
+  .decision-title {
+    font-size: clamp(1.4rem, 5vw, 2rem);
+    color: var(--pink-700);
+    margin-bottom: 12px;
+  }
+
+  .decision-msg {
+    color: var(--pink-800);
+    font-size: 1.05rem;
+    margin-bottom: 30px;
+    line-height: 1.6;
+  }
+
+  .decision-buttons {
     display: flex;
     justify-content: center;
     gap: 20px;
     position: relative;
-    height: 70px;
+    min-height: 70px;
   }
 
   button {
-    padding: 12px 22px;
+    font-family: var(--font-main);
+  }
+
+  #okBtn, #noBtn {
+    padding: 14px 26px;
     font-size: 1rem;
     border: none;
     border-radius: 50px;
     cursor: pointer;
     font-weight: bold;
-    transition: transform 0.2s ease;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    transition: transform var(--transition-fast);
+    box-shadow: 0 8px 18px rgba(0,0,0,0.18);
   }
 
   #okBtn {
-    background: linear-gradient(135deg, #ff8fc7, #ff5ca8);
+    background: linear-gradient(135deg, var(--pink-400), var(--pink-600));
     color: white;
   }
 
@@ -92,20 +643,25 @@
     transform: scale(1.08);
   }
 
+  #okBtn:active {
+    transform: scale(0.96);
+  }
+
   #noBtn {
     background: linear-gradient(135deg, #bbb, #888);
     color: white;
     position: relative;
-    left: 0;
-    top: 0;
   }
 
+  /* ==========================================================
+     12. FLOWERS / CONFETTI / FLOATING ELEMENTS
+  ========================================================== */
   .flower {
     position: fixed;
     top: -50px;
     font-size: 1.8rem;
     animation: fall linear forwards;
-    z-index: 3;
+    z-index: 30;
     pointer-events: none;
   }
 
@@ -115,16 +671,32 @@
     }
   }
 
+  .confetti-piece {
+    position: fixed;
+    top: -20px;
+    width: 10px;
+    height: 16px;
+    z-index: 30;
+    pointer-events: none;
+    animation: confettiFall linear forwards;
+  }
+
+  @keyframes confettiFall {
+    to {
+      transform: translateY(110vh) rotate(720deg);
+    }
+  }
+
   .piu-text {
     position: fixed;
     top: 40%;
     left: 50%;
     transform: translate(-50%, -50%) scale(0);
-    font-size: 3rem;
-    color: #ff3d8a;
-    text-shadow: 2px 2px 0 #fff, 0 0 20px #ff8fc7;
+    font-size: clamp(2rem, 8vw, 3.4rem);
+    color: var(--pink-600);
+    text-shadow: 2px 2px 0 #fff, 0 0 20px var(--pink-400);
     font-weight: bold;
-    z-index: 10;
+    z-index: 40;
     animation: popIn 0.6s ease forwards;
     text-align: center;
     pointer-events: none;
@@ -136,66 +708,584 @@
     100% { transform: translate(-50%, -50%) scale(1) rotate(0deg); opacity: 1; }
   }
 
-  .hidden {
-    display: none;
+  /* ==========================================================
+     13. THANK YOU OVERLAY
+  ========================================================== */
+  #thankyou-overlay {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255, 182, 217, 0.97), rgba(255, 92, 168, 0.97));
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 30px;
+    z-index: 100;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
   }
+
+  #thankyou-overlay.show {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .thankyou-emoji {
+    font-size: 4rem;
+    margin-bottom: 20px;
+    animation: heartbeat 1.2s ease-in-out infinite;
+  }
+
+  .thankyou-title {
+    color: white;
+    font-size: clamp(1.6rem, 6vw, 2.4rem);
+    margin-bottom: 14px;
+    text-shadow: 2px 2px 6px rgba(0,0,0,0.2);
+  }
+
+  .thankyou-msg {
+    color: white;
+    font-size: 1.1rem;
+    max-width: 460px;
+    line-height: 1.7;
+    margin-bottom: 26px;
+  }
+
+  .thankyou-close {
+    background: white;
+    color: var(--pink-600);
+    border: none;
+    padding: 12px 26px;
+    border-radius: 50px;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+    transition: transform var(--transition-fast);
+  }
+
+  .thankyou-close:hover {
+    transform: scale(1.06);
+  }
+
+  /* ==========================================================
+     14. FOOTER
+  ========================================================== */
+  footer {
+    text-align: center;
+    padding: 30px 20px 50px;
+    color: var(--pink-700);
+    font-size: 0.9rem;
+    position: relative;
+    z-index: 2;
+  }
+
+  footer .footer-heart {
+    font-size: 1.2rem;
+    animation: heartbeat 1.4s ease-in-out infinite;
+    display: inline-block;
+  }
+
+  /* ==========================================================
+     15. UTILITY ANIMATIONS
+  ========================================================== */
+  .fade-in {
+    animation: fadeIn 1s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .shake {
+    animation: shakeAnim 0.5s ease;
+  }
+
+  @keyframes shakeAnim {
+    0%, 100% { transform: translateX(0); }
+    20% { transform: translateX(-8px); }
+    40% { transform: translateX(8px); }
+    60% { transform: translateX(-6px); }
+    80% { transform: translateX(6px); }
+  }
+
+  .hidden {
+    display: none !important;
+  }
+
+  /* ==========================================================
+     16. RESPONSIVE MEDIA QUERIES
+  ========================================================== */
+  @media (max-width: 480px) {
+    .glass-card, .decision-card {
+      padding: 30px 20px;
+    }
+    .letter-paper {
+      padding: 22px 18px;
+    }
+    .decision-buttons {
+      flex-direction: column;
+      align-items: center;
+    }
+    #noBtn {
+      margin-top: 4px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+
 </style>
 </head>
 <body>
 
-  <div class="card" id="mainCard">
-    <div class="hearts-decor">🌸💗🌸</div>
-    <h1>I'm Really Sorry, Piu 😭</h1>
-    <p class="msg">Piu maaf kar dena yr 😭😭... <br>I didn't mean to hurt you with my words. Please forgive me?</p>
-    <div class="buttons">
-      <button id="okBtn">Its OK 🫠</button>
-      <button id="noBtn">NO 😡</button>
+  <!-- =====================================================================
+       LOADER
+  ===================================================================== -->
+  <div id="loader">
+    <div class="loader-heart">💗</div>
+    <div class="loader-text">loading something for Piu...</div>
+    <div class="loader-bar-track">
+      <div class="loader-bar-fill"></div>
     </div>
   </div>
 
+  <!-- =====================================================================
+       AMBIENT FLOATING BACKGROUND LAYER (populated by JS)
+  ===================================================================== -->
+  <div id="ambient-layer"></div>
+
+  <!-- =====================================================================
+       SIDE NAV DOTS
+  ===================================================================== -->
+  <div id="nav-dots">
+    <div class="nav-dot" data-target="hero"></div>
+    <div class="nav-dot" data-target="letter"></div>
+    <div class="nav-dot" data-target="reasons"></div>
+    <div class="nav-dot" data-target="memories"></div>
+    <div class="nav-dot" data-target="mood"></div>
+    <div class="nav-dot" data-target="decision"></div>
+  </div>
+
+  <!-- =====================================================================
+       HERO SECTION
+  ===================================================================== -->
+  <section id="hero">
+    <div class="hero-badge">piu 🫠</div>
+    <h1 class="hero-title">I'm Really Sorry, Piu 😭</h1>
+    <p class="hero-sub">
+      Piu maaf kar dena yr 😭😭...
+      I didn't mean to hurt you with my words, and I've been thinking about it ever since.
+      <span class="hero-highlight">Abhi pura dekh....</span>
+    </p>
+    <div class="scroll-hint" id="scrollHint">
+      <span>scroll down, please? 🥺</span>
+      <span>⬇️</span>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       LETTER SECTION
+  ===================================================================== -->
+  <section id="letter">
+    <div class="glass-card">
+      <h2 class="section-heading">A Little Letter For You 💌</h2>
+      <div class="letter-paper">
+        <p id="letter-text"></p>
+        <p class="letter-signature" id="letterSignature">— your idiot friend, who is truly sorry 🫂</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       REASONS SECTION
+  ===================================================================== -->
+  <section id="reasons">
+    <h2 class="section-heading">Why I'm Sorry 🌷</h2>
+    <div class="reasons-grid">
+
+      <div class="reason-card">
+        <span class="reason-icon">🗣️</span>
+        <div class="reason-title">My Words</div>
+        <div class="reason-desc"> piu aaise hi bol diya tha, gusse me ... gusse me iisan pagla jata hai n.</div>
+      </div>
+
+      <div class="reason-card">
+        <span class="reason-icon">💭</span>
+        <div class="reason-title">Not Thinking</div>
+        <div class="reason-desc">I should've paused before reacting. I let a moment get bigger than it needed to be.</div>
+      </div>
+
+      <div class="reason-card">
+        <span class="reason-icon">💔</span>
+        <div class="reason-title">Hurting You</div>
+        <div class="reason-desc">janta tujhe bura laga par piu... maaf nhi karegii mujhe .</div>
+      </div>
+
+      <div class="reason-card">
+        <span class="reason-icon">🤝</span>
+        <div class="reason-title">Our Friendship</div>
+        <div class="reason-desc">Tu to Jan hai n, meri.... Aaise kaise bol sakti hai kuchh nhi hu....</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       MEMORIES CAROUSEL SECTION
+  <!-- =====================================================================
+       MOOD SLIDER SECTION
+  ===================================================================== -->
+  <section id="mood">
+    <div class="mood-box">
+      <h2 class="section-heading">How Mad Are You, Really? 👀</h2>
+      <div class="mood-emoji-display" id="moodEmoji">😡</div>
+      <input type="range" min="0" max="100" value="50" class="mood-range" id="moodRange">
+      <div class="mood-label" id="moodLabel">still pretty mad</div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       FINAL DECISION SECTION
+  ===================================================================== -->
+  <section id="decision">
+    <div class="decision-card" id="mainCard">
+      <div class="decision-hearts">piiuuu😭😭😭</div>
+      <h2 class="decision-title">So... Can You Forgive Me?</h2>
+      <p class="decision-msg">
+        tere payer padta hu..., aur tu to devi hai.., Devi kaa Dil bahot badha hota hai,to maaf kar dena yr 😭😭
+      </p>
+      <div class="decision-buttons">
+        <button id="okBtn">Its OK 🫠</button>
+        <button id="noBtn">NO 😡</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       THANK YOU OVERLAY (shown after forgiveness)
+  ===================================================================== -->
+  <div id="thankyou-overlay">
+    <div class="thankyou-emoji">🥹💗</div>
+    <div class="thankyou-title">piuu 😭😭!</div>
+    <p class="thankyou-msg">
+      meli pyali piuu 😭 😭😭, dekh mera tere aalawa koii nhi hai, aab kabhi aaise gussa mat hona 😭😭😭😭😭😭
+          Jan hai tu meri. 😭😭 🫂
+    </p>
+    <button class="thankyou-close" id="closeThankyou">Okay, close this 🥰</button>
+  </div>
+
+  <!-- =====================================================================
+       FOOTER
+  ===================================================================== -->
+  <footer>
+    made with a lot of <span class="footer-heart"></span> and a little bit of guilt
+  </footer>
+
+  <!-- =====================================================================
+       SCRIPT
+       Organized into modules:
+         A. Loader control
+         B. Ambient background particles (hearts + sparkles)
+         C. Nav dots + scroll spy
+         D. Letter typewriter effect
+         E. Reasons scroll-reveal (IntersectionObserver)
+         F. Memories carousel
+         G. Mood slider
+         H. Decision buttons (NO runs away, OK triggers flowers/confetti)
+         I. Thank-you overlay control
+  ===================================================================== -->
   <script>
+  (function () {
+    'use strict';
+
+    /* ========================================================
+       A. LOADER CONTROL
+    ======================================================== */
+    window.addEventListener('load', function () {
+      const loader = document.getElementById('loader');
+      setTimeout(function () {
+        loader.classList.add('hide');
+      }, 1600);
+    });
+
+    /* ========================================================
+       B. AMBIENT BACKGROUND PARTICLES
+    ======================================================== */
+    const ambientLayer = document.getElementById('ambient-layer');
+    const heartEmojis = ['💗', '💕', '💖', '🌸', '🩷'];
+    const sparkleEmojis = ['✨', '⭐', '💫'];
+
+    function spawnFloatingHeart() {
+      const heart = document.createElement('div');
+      heart.classList.add('floating-heart');
+      heart.textContent = heartEmojis[Math.floor(Math.random() * heartEmojis.length)];
+      heart.style.left = Math.random() * 100 + 'vw';
+      const duration = 6 + Math.random() * 6;
+      heart.style.animationDuration = duration + 's';
+      heart.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+      heart.style.fontSize = (1 + Math.random() * 1.2) + 'rem';
+      ambientLayer.appendChild(heart);
+      setTimeout(function () {
+        heart.remove();
+      }, duration * 1000 + 200);
+    }
+
+    function spawnSparkle() {
+      const sparkle = document.createElement('div');
+      sparkle.classList.add('sparkle');
+      sparkle.textContent = sparkleEmojis[Math.floor(Math.random() * sparkleEmojis.length)];
+      sparkle.style.left = Math.random() * 100 + 'vw';
+      sparkle.style.top = Math.random() * 100 + 'vh';
+      ambientLayer.appendChild(sparkle);
+      setTimeout(function () {
+        sparkle.remove();
+      }, 2600);
+    }
+
+    setInterval(spawnFloatingHeart, 900);
+    setInterval(spawnSparkle, 1400);
+
+    /* ========================================================
+       C. NAV DOTS + SCROLL SPY
+    ======================================================== */
+    const navDots = document.querySelectorAll('.nav-dot');
+    const sections = Array.from(navDots).map(function (dot) {
+      return document.getElementById(dot.getAttribute('data-target'));
+    });
+
+    navDots.forEach(function (dot) {
+      dot.addEventListener('click', function () {
+        const targetId = dot.getAttribute('data-target');
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      });
+    });
+
+    function updateActiveDot() {
+      let currentIndex = 0;
+      const scrollPos = window.scrollY + window.innerHeight / 2;
+
+      sections.forEach(function (sec, index) {
+        if (sec && sec.offsetTop <= scrollPos) {
+          currentIndex = index;
+        }
+      });
+
+      navDots.forEach(function (dot, index) {
+        dot.classList.toggle('active', index === currentIndex);
+      });
+    }
+
+    window.addEventListener('scroll', updateActiveDot);
+    updateActiveDot();
+
+    document.getElementById('scrollHint').addEventListener('click', function () {
+      document.getElementById('letter').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    /* ========================================================
+       D. LETTER TYPEWRITER EFFECT
+    ======================================================== */
+    const letterFullText =
+      "Piu, I know saying sorry doesn't erase what I said, but I need you to know " +
+      "that I regret it. I wasn't thinking clearly, and I let my words get sharper " +
+      "than I meant them to be.\n\n" +
+      "You didn't deserve that, and if I could take it back, I would in a heartbeat. " +
+      "I'm not asking you to forget it happened, just... please don't let it be the " +
+      "reason things change between us.\n\n" +
+      "I miss talking to you normally already. 😭";
+
+    let letterTypedOnce = false;
+    const letterTextEl = document.getElementById('letter-text');
+    const letterSignatureEl = document.getElementById('letterSignature');
+
+    function typeLetter() {
+      if (letterTypedOnce) return;
+      letterTypedOnce = true;
+
+      let i = 0;
+      const cursor = document.createElement('span');
+      cursor.classList.add('typing-cursor');
+
+      function typeChar() {
+        if (i <= letterFullText.length) {
+          letterTextEl.textContent = letterFullText.slice(0, i);
+          letterTextEl.appendChild(cursor);
+          i++;
+          setTimeout(typeChar, 18);
+        } else {
+          cursor.remove();
+          letterSignatureEl.classList.add('show');
+        }
+      }
+      typeChar();
+    }
+
+    const letterObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        if (entry.isIntersecting) {
+          typeLetter();
+        }
+      });
+    }, { threshold: 0.4 });
+
+    letterObserver.observe(document.getElementById('letter'));
+
+    /* ========================================================
+       E. REASONS SCROLL REVEAL
+    ======================================================== */
+    const reasonCards = document.querySelectorAll('.reason-card');
+
+    const reasonObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry, i) {
+        if (entry.isIntersecting) {
+          setTimeout(function () {
+            entry.target.classList.add('visible');
+          }, i * 120);
+          reasonObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.25 });
+
+    reasonCards.forEach(function (card) {
+      reasonObserver.observe(card);
+    });
+
+    /* ========================================================
+       F. MEMORIES CAROUSEL
+    ======================================================== */
+    const carouselTrack = document.getElementById('carouselTrack');
+    const slides = document.querySelectorAll('.carousel-slide');
+    const dotsContainer = document.getElementById('carouselDots');
+    const prevBtn = document.getElementById('prevSlide');
+    const nextBtn = document.getElementById('nextSlide');
+    let currentSlide = 0;
+
+    slides.forEach(function (_, index) {
+      const dot = document.createElement('div');
+      dot.classList.add('carousel-dot');
+      if (index === 0) dot.classList.add('active');
+      dot.addEventListener('click', function () {
+        goToSlide(index);
+      });
+      dotsContainer.appendChild(dot);
+    });
+
+    const carouselDots = document.querySelectorAll('.carousel-dot');
+
+    function goToSlide(index) {
+      currentSlide = (index + slides.length) % slides.length;
+      carouselTrack.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
+      carouselDots.forEach(function (dot, i) {
+        dot.classList.toggle('active', i === currentSlide);
+      });
+    }
+
+    prevBtn.addEventListener('click', function () {
+      goToSlide(currentSlide - 1);
+    });
+
+    nextBtn.addEventListener('click', function () {
+      goToSlide(currentSlide + 1);
+    });
+
+    let autoSlideInterval = setInterval(function () {
+      goToSlide(currentSlide + 1);
+    }, 4500);
+
+    carouselTrack.addEventListener('mouseenter', function () {
+      clearInterval(autoSlideInterval);
+    });
+
+    carouselTrack.addEventListener('mouseleave', function () {
+      autoSlideInterval = setInterval(function () {
+        goToSlide(currentSlide + 1);
+      }, 4500);
+    });
+
+    /* ========================================================
+       G. MOOD SLIDER
+    ======================================================== */
+    const moodRange = document.getElementById('moodRange');
+    const moodEmoji = document.getElementById('moodEmoji');
+    const moodLabel = document.getElementById('moodLabel');
+
+    const moodStages = [
+      { max: 10,  emoji: '🤬', label: "extremely mad" },
+      { max: 25,  emoji: '😡', label: "still pretty mad" },
+      { max: 40,  emoji: '😠', label: "annoyed" },
+      { max: 55,  emoji: '😐', label: "neutral, thinking about it" },
+      { max: 70,  emoji: '🙂', label: "cooling down" },
+      { max: 85,  emoji: '😊', label: "okay, kind of forgiving" },
+      { max: 100, emoji: '🥰', label: "fully forgiven, come here 🫂" }
+    ];
+
+    function updateMood() {
+      const value = parseInt(moodRange.value, 10);
+      const stage = moodStages.find(function (s) {
+        return value <= s.max;
+      }) || moodStages[moodStages.length - 1];
+
+      moodEmoji.textContent = stage.emoji;
+      moodLabel.textContent = stage.label;
+      moodEmoji.style.transform = 'scale(' + (1 + value / 300) + ')';
+    }
+
+    moodRange.addEventListener('input', updateMood);
+    updateMood();
+
+    /* ========================================================
+       H. DECISION BUTTONS
+    ======================================================== */
     const noBtn = document.getElementById('noBtn');
     const okBtn = document.getElementById('okBtn');
-    const buttonsContainer = document.querySelector('.buttons');
+    const mainCard = document.getElementById('mainCard');
 
-    // Make the NO button run away on click / hover
     function moveNoButton() {
-      const containerRect = buttonsContainer.getBoundingClientRect();
       const btnWidth = noBtn.offsetWidth;
       const btnHeight = noBtn.offsetHeight;
 
-      // Move it somewhere random on the whole screen so it feels like it's "running away"
       const maxX = window.innerWidth - btnWidth - 20;
       const maxY = window.innerHeight - btnHeight - 20;
 
-      const randomX = Math.random() * maxX;
-      const randomY = Math.random() * maxY;
+      const randomX = Math.max(10, Math.random() * maxX);
+      const randomY = Math.max(10, Math.random() * maxY);
 
       noBtn.style.position = 'fixed';
       noBtn.style.left = randomX + 'px';
       noBtn.style.top = randomY + 'px';
-      noBtn.style.zIndex = '20';
+      noBtn.style.zIndex = '60';
+
+      mainCard.classList.remove('shake');
+      void mainCard.offsetWidth; /* restart animation */
+      mainCard.classList.add('shake');
     }
 
     noBtn.addEventListener('click', moveNoButton);
-    noBtn.addEventListener('mouseover', moveNoButton); // extra cheeky on desktop
-    noBtn.addEventListener('touchstart', function(e) {
+    noBtn.addEventListener('mouseover', moveNoButton);
+    noBtn.addEventListener('touchstart', function (e) {
       e.preventDefault();
       moveNoButton();
     });
 
-    // Flower fall + Piu text on "Its OK"
-    okBtn.addEventListener('click', function() {
-      spawnFlowers();
-      spawnPiuText();
-    });
-
+    /* ---- Flowers ---- */
     function spawnFlowers() {
       const flowers = ['🌸', '🌺', '🌷', '💐', '🌼', '💮'];
-      const count = 40;
+      const count = 45;
 
       for (let i = 0; i < count; i++) {
-        setTimeout(() => {
+        setTimeout(function () {
           const flower = document.createElement('div');
           flower.classList.add('flower');
           flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
@@ -205,11 +1295,37 @@
           flower.style.fontSize = (1.2 + Math.random() * 1.5) + 'rem';
           document.body.appendChild(flower);
 
-          setTimeout(() => flower.remove(), duration * 1000 + 200);
-        }, i * 80);
+          setTimeout(function () {
+            flower.remove();
+          }, duration * 1000 + 200);
+        }, i * 70);
       }
     }
 
+    /* ---- Confetti ---- */
+    function spawnConfetti() {
+      const colors = ['#ff8fc7', '#ff5ca8', '#ffd1e8', '#c084fc', '#ffe066'];
+      const count = 60;
+
+      for (let i = 0; i < count; i++) {
+        setTimeout(function () {
+          const piece = document.createElement('div');
+          piece.classList.add('confetti-piece');
+          piece.style.left = Math.random() * 100 + 'vw';
+          piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+          const duration = 2.5 + Math.random() * 2.5;
+          piece.style.animationDuration = duration + 's';
+          piece.style.transform = 'rotate(' + Math.random() * 360 + 'deg)';
+          document.body.appendChild(piece);
+
+          setTimeout(function () {
+            piece.remove();
+          }, duration * 1000 + 200);
+        }, i * 40);
+      }
+    }
+
+    /* ---- Piu text pop ---- */
     function spawnPiuText() {
       const existing = document.querySelector('.piu-text');
       if (existing) existing.remove();
@@ -219,14 +1335,40 @@
       piuText.innerHTML = 'Piu 😭🫂';
       document.body.appendChild(piuText);
 
-      setTimeout(() => {
+      setTimeout(function () {
         piuText.style.transition = 'opacity 1s ease';
         piuText.style.opacity = '0';
-        setTimeout(() => piuText.remove(), 1000);
+        setTimeout(function () {
+          piuText.remove();
+        }, 1000);
       }, 3500);
     }
+
+    /* ---- Thank you overlay ---- */
+    const thankyouOverlay = document.getElementById('thankyou-overlay');
+    const closeThankyouBtn = document.getElementById('closeThankyou');
+
+    function showThankyou() {
+      setTimeout(function () {
+        thankyouOverlay.classList.add('show');
+      }, 1200);
+    }
+
+    closeThankyouBtn.addEventListener('click', function () {
+      thankyouOverlay.classList.remove('show');
+    });
+
+    okBtn.addEventListener('click', function () {
+      spawnFlowers();
+      spawnConfetti();
+      spawnPiuText();
+      showThankyou();
+      moodRange.value = 100;
+      updateMood();
+    });
+
+  })();
   </script>
 
 </body>
 </html>
-
